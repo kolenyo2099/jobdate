@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Read the datePosted metadata from a public LinkedIn job listing.">
+    <title>Posted At — LinkedIn timestamp reader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <!--
+      THESIS: A timestamp reader that treats the result as evidence, not a claim; it refuses the generic dashboard card stack.
+      OWN-WORLD: Quiet evidence-sheet surface, ink-blue type, sea-glass accent, thin rules, and one generously scaled result field.
+      STORY: Paste a public job URL, inspect LinkedIn's datePosted field, and leave knowing exactly what the time means.
+      FIRST VIEWPORT: A compact masthead tops a focused URL form; the result occupies the wide lower panel and the action sits flush to the input.
+      FORM: Evidence sheet, candidate 3; seed key 8cc8954e.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <main class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="./" aria-label="Posted At home">Posted At<span aria-hidden="true">·</span></a>
+        <p>LinkedIn job timestamp reader</p>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <h1 id="page-title">See the date behind “posted X ago.”</h1>
+        <p>Paste a public LinkedIn job URL. The reader finds the page’s structured <code>datePosted</code> value and shows it in your local time.</p>
+      </section>
+
+      <section class="lookup" aria-labelledby="lookup-title">
+        <h2 id="lookup-title">Job URL</h2>
+        <form id="lookup-form" novalidate>
+          <label class="sr-only" for="job-url">LinkedIn job URL</label>
+          <div class="input-row">
+            <input
+              id="job-url"
+              name="job-url"
+              type="url"
+              inputmode="url"
+              autocomplete="url"
+              placeholder="https://www.linkedin.com/jobs/view/…"
+              required
+              aria-describedby="url-help"
+            >
+            <button id="submit-button" type="submit">Find date</button>
+          </div>
+          <p id="url-help" class="field-help">Works with public <span>linkedin.com/jobs/view/</span> listings. No LinkedIn sign-in is required.</p>
+        </form>
+      </section>
+
+      <section id="result" class="result is-idle" aria-live="polite" aria-atomic="true" aria-labelledby="result-title">
+        <div class="result-label" id="result-title">Result</div>
+        <div class="result-content">
+          <p class="result-placeholder">Your extracted posting date will appear here.</p>
+        </div>
+      </section>
+
+      <aside class="note" aria-label="What this result means">
+        <div class="note-mark" aria-hidden="true"></div>
+        <p><strong>What it means:</strong> This is LinkedIn’s current <code>datePosted</code> metadata. A listing can be renewed or reposted, so it is not independent proof of the first time a company advertised an equivalent role.</p>
+      </aside>
+
+      <footer>
+        <p>Reads public page metadata only. Your URL is not stored by this app.</p>
+        <a href="https://github.com/kolenyo2099/jobdate" target="_blank" rel="noreferrer">View source</a>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
