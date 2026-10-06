@@ -32,7 +32,7 @@ if ($datePosted === null) {
 
 respond(200, ['datePosted' => $datePosted]);
 
-function respond(int $status, array $body): never {
+function respond(int $status, array $body) {
     http_response_code($status);
     echo json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
@@ -47,7 +47,7 @@ function isLinkedInJobUrl(string $url): bool {
         return false;
     }
     $host = strtolower((string) ($parts['host'] ?? ''));
-    $validHost = $host === 'linkedin.com' || str_ends_with($host, '.linkedin.com');
+    $validHost = preg_match('/(^|\\.)linkedin\\.com$/', $host) === 1;
     $path = (string) ($parts['path'] ?? '');
     return $validHost && preg_match('#^/jobs/view(?:/|$)#', $path) === 1;
 }
@@ -72,7 +72,7 @@ function fetchPage(string $url): string {
     ]);
 
     $body = curl_exec($curl);
-    $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+    $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
     $effectiveUrl = (string) curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
     $error = curl_error($curl);
     if (!is_string($body) || $status < 200 || $status >= 300 || !isLinkedInJobUrl($effectiveUrl)) {
@@ -105,7 +105,7 @@ function extractDatePosted(string $html): ?string {
     return null;
 }
 
-function findJobPostingDate(mixed $node): ?string {
+function findJobPostingDate($node): ?string {
     if (!is_array($node)) {
         return null;
     }
@@ -126,7 +126,7 @@ function findJobPostingDate(mixed $node): ?string {
 function normalizeDate(string $value): ?string {
     try {
         return (new DateTimeImmutable($value))->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\\TH:i:s.v\\Z');
-    } catch (Exception) {
+    } catch (Exception $exception) {
         return null;
     }
 }
